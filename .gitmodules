@@ -1,0 +1,6 @@
+[submodule "vendor/ht"]
+	path = vendor/ht
+	url = git@github.com:bartossh/ht.git
+[submodule "vendor/log.c"]
+	path = vendor/log.c
+	url = git@github.com:rxi/log.c.git
