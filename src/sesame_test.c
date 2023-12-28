@@ -11,7 +11,8 @@ void tearDown(void)
 
 static void test_basic(void)
 {
-    TEST_ASSERT_EQUAL(0, 0);
+    int result = SE_check();
+    TEST_ASSERT_EQUAL(SE_ErrPownedModuleNotReady, result);
 }
 
 int main(void)

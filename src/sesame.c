@@ -1,3 +1,5 @@
 #include "sesame.h"
 
-void dummy(void) {}
+int SE_check(void) {
+    return SE_ErrPownedModuleNotReady;
+}
