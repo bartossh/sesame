@@ -17,14 +17,24 @@ ASANFLAGS  = -fsanitize=address
 ASANFLAGS += -fno-common
 ASANFLAGS += -fno-omit-frame-pointer
 
+.PHONY: run
+run: build
+	./sesame.out somePasswordThatIsLong
+
+.PHONY: build
+build: ./src/sesame.c ./src/sesame.h
+	@echo Compiling $@
+	@$(CC) $(ASANFLAGS) $(CFLAGS) ./src/sesame.c ./src/main.c -o sesame.out $(LIBS)
+	@echo "Build finished"
+
 .PHONY: test
 test: tests.out
 	@./tests.out
 
 .PHONY: memcheck
-memcheck: ./src/*.c ./src/*.h ./test-framework/*.h
+memcheck: ./src/sesame.c ./src/sesame.h ./test-framework/*.h
 	@echo Compiling $@
-	@$(CC) $(ASANFLAGS) $(CFLAGS) test-framework/unity.c ./src/*.c -o memcheck.out $(LIBS)
+	@$(CC) $(ASANFLAGS) $(CFLAGS) test-framework/unity.c ./src/sesame.c ./src/sesame_test.c -o memcheck.out $(LIBS)
 	@./memcheck.out
 	@echo "Memory check passed"
 
@@ -32,6 +42,6 @@ memcheck: ./src/*.c ./src/*.h ./test-framework/*.h
 clean:
 	rm -rf *.o *.out *.out.dSYM
 
-tests.out: ./src/*.c ./src/*.h ./test-framework/*.h
+tests.out: ./src/sesame.c ./src/sesame.h ./test-framework/*.h
 	@echo Compiling $@
-	@$(CC) $(CFLAGS) test-framework/unity.c ./src/*.c -o tests.out $(LIBS)
+	@$(CC) $(CFLAGS) test-framework/unity.c ./src/sesame.c ./src/sesame_test.c -o tests.out $(LIBS)
