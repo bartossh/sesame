@@ -16,13 +16,15 @@ int min(int a, int b) {
 
 void validator(unsigned char* str) {
     unsigned long result = SE_shannon(str);
+    unsigned long long days = SE_bruteForceDays(result);
+    
     printf("\n");
     switch (result) {
         case 1:
-            printf("INFO: Password: [ %s ] has [ %lu ] bit of Shannon entropy.\n", str, result);
+            printf("INFO: Password: [ %s ] has %lu bit of Shannon entropy.\n", str, result);
             break;
         default:
-            printf("INFO: Password: [ %s ] has [ %lu ] bits of Shannon entropy.\n", str, result);
+            printf("INFO: Password: [ %s ] has %lu bits of Shannon entropy.\n", str, result);
             break;
     }
     printf("\n");
@@ -33,6 +35,20 @@ void validator(unsigned char* str) {
            32 - strength,
            "                                 ",
            "|<<< MAX\n"); 
+    printf("\n");
+    if (days < 365) {
+        printf(
+            "INFO: It will take %llu days to brute force your password with speed of 1000 guesses/second.\n",
+            days
+        );
+    } else {
+        char *yd = SE_yearsAndDays(days);
+        printf(
+            "INFO: It will take %s to brute force your password with speed of 1000 guesses/second.\n",
+            yd
+        );
+        free(yd);
+    }
     printf("\n");
 }
    

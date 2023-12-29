@@ -12,4 +12,14 @@ int SE_check(void);
 unsigned long 
 SE_shannon(unsigned char *str);
 
+/// SE_bruteForceDays calculates theoertical number of days required to brute force the password.
+///
+/// bits - number of entropy bits.
+unsigned long long SE_bruteForceDays(unsigned long bits);
+
+///SE_yearsAndDays returns string in format "%llu years %llu days" from days.
+///
+///days - number of days.
+char *SE_yearsAndDays(unsigned long long days);
+
 #endif
