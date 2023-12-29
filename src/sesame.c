@@ -6,6 +6,8 @@
 #include "sesame.h"
 #include "../vendor/ht/src/ht.h"
 
+#define operationsPerDay (60*60*24*1000)
+
 unsigned long 
 SE_shannon(unsigned char *str) {
     if (!str) {
@@ -55,3 +57,18 @@ SE_shannon(unsigned char *str) {
 
     return (unsigned long)ceil(sum) * len;
 }
+
+unsigned long long SE_bruteForceDays(unsigned long bits) { 
+    return ((unsigned long long)pow(2.0, (double)bits)) / operationsPerDay;
+}
+
+char *SE_yearsAndDays(unsigned long long days) {
+    unsigned long long d = days % 365;
+    unsigned long long y = days / 365;
+    size_t len = (d / 10 + 1)  + (y / 10 + 1) + 17; 
+    char *buf = malloc(sizeof(char)*len);
+    snprintf(buf, len*sizeof(char), "%llu years and %llu days", y, d);
+    buf[len-1] = '\0';
+    return buf;
+}
+
