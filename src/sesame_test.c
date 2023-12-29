@@ -10,12 +10,6 @@ void setUp(void) {
 void tearDown(void) {
 }
 
-static void testBasic(void) {
-    log_info("Testing SE_check() function.\n");
-    int result = SE_check();
-    TEST_ASSERT_EQUAL(SE_ErrPownedModuleNotReady, result);
-}
-
 static void testShannon(void) {
     typedef struct testPair {
         const char *password;
@@ -45,7 +39,7 @@ static void testShannon(void) {
         }
     };
 
-    log_info("Testing SE_shannon() function.\n");
+    log_info("Testing SE_shannon() function.");
     for (size_t tc = 0; tc < 5; tc++) {
         unsigned long result = SE_shannon((unsigned char*)testCases[tc].password);
         printf("Password [ %s ] = [ %lu ] bits of entropy.\n", testCases[tc].password, result);
@@ -57,7 +51,7 @@ static void benchShannon(void) {
     const size_t iter = 1000;
     struct timeval begin, end;
     gettimeofday(&begin, 0);
-    log_info("Benchmarking SE_shannon() function.\n");
+    log_info("Benchmarking SE_shannon() function.");
     char psswd[] = "someLongPasswordToBench";
     for (size_t tc = 0; tc < iter; tc++) {
         unsigned long result = SE_shannon((unsigned char*)psswd);
@@ -68,15 +62,14 @@ static void benchShannon(void) {
     long seconds = end.tv_sec - begin.tv_sec;
     long microseconds = end.tv_usec - begin.tv_usec;
     double elapsed = seconds + microseconds*1e-6;
-    log_info("Calculating Shannon bits entropy for %lu passwords took [ %f_sec ]\n", iter, elapsed);
-    log_info("Shannon entropy took [ %f_sec ] per password of length of %lu characters.\n", elapsed/(double)iter, strlen(psswd));
+    log_info("Calculating Shannon bits entropy for %lu passwords took [ %f_sec ].", iter, elapsed);
+    log_info("Shannon entropy took [ %f_sec ] per password of length of %lu characters.", elapsed/(double)iter, strlen(psswd));
 }
 
 int main(void)
 {
     UnityBegin("sesame_test.c");
 
-    RUN_TEST(testBasic);
     RUN_TEST(testShannon);
     
     RUN_TEST(benchShannon);

@@ -31,9 +31,9 @@ build: ./src/sesame.c ./src/sesame.h
 	@echo "Build finished"
 
 .PHONY: release
-release: ./src/sesame.c ./src/sesame.h
+release:
 	@echo Compiling $@
-	@$(CC) $(ASANFLAGS) $(CFLAGS) $(VENDOR) ./src/sesame.c ./src/main.c -o sesame $(LIBS)
+	@$(CC) -flto -Wall $(VENDOR) ./src/sesame.c ./src/main.c -o sesame
 	@echo "Build finished"
 
 .PHONY: test
@@ -41,7 +41,7 @@ test: tests.out
 	@./tests.out
 
 .PHONY: memcheck
-memcheck: ./src/sesame.c ./src/sesame.h ./test-framework/*.h
+memcheck:
 	@echo Compiling $@
 	@$(CC) $(ASANFLAGS) $(CFLAGS) test-framework/unity.c $(VENDOR) ./src/sesame.c ./src/sesame_test.c -o memcheck.out $(LIBS)
 	@./memcheck.out
