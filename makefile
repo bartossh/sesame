@@ -27,7 +27,13 @@ run: build
 .PHONY: build
 build: ./src/sesame.c ./src/sesame.h
 	@echo Compiling $@
-	@$(CC) $(ASANFLAGS) $(CFLAGS) ./src/sesame.c ./src/main.c -o sesame.out $(LIBS)
+	@$(CC) $(ASANFLAGS) $(CFLAGS) $(VENDOR) ./src/sesame.c ./src/main.c -o sesame.out $(LIBS)
+	@echo "Build finished"
+
+.PHONY: release
+release: ./src/sesame.c ./src/sesame.h
+	@echo Compiling $@
+	@$(CC) $(ASANFLAGS) $(CFLAGS) $(VENDOR) ./src/sesame.c ./src/main.c -o sesame $(LIBS)
 	@echo "Build finished"
 
 .PHONY: test
