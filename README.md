@@ -9,7 +9,7 @@ This software is not ready yet.
 
 ## Modules
 
-- [ ] Entropy
+- [x] Entropy
 - [ ] Pwned Passwords
 - [ ] NLP model
 
