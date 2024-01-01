@@ -1,7 +1,8 @@
 ### If you wish to use extra libraries (math.h for instance),
-### add their flags here (-lm in our case) in the "LIBS" variable.
+### On mac install curl and openssl with homebrew. 
+### On Linux use: -lm -lcurl -lssl -lcrypto.
 
-LIBS = -lm
+LIBS = -lm -lcurl -lssl -lcrypto -I/opt/homebrew/Cellar/openssl@3/3.2.0_1/include -L/opt/homebrew/Cellar/openssl@3/3.2.0_1/lib
 
 ###
 CFLAGS  = -std=c17
@@ -33,7 +34,7 @@ build: ./src/sesame.c ./src/sesame.h
 .PHONY: release
 release:
 	@echo Compiling $@
-	@$(CC) -flto -Wall $(VENDOR) ./src/sesame.c ./src/main.c -o sesame
+	@$(CC) $(ASANFLAGS) $(CFLAGS) $(VENDOR) ./src/sesame.c ./src/main.c -o sesame $(LIBS)
 	@echo "Build finished"
 
 .PHONY: test

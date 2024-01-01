@@ -40,9 +40,9 @@ static void testShannon(void) {
         }
     };
 
-    log_info("Testing SE_shannon function.");
+    log_info("Testing se_shannon function.");
     for (size_t tc = 0; tc < 5; tc++) {
-        unsigned long result = SE_shannon((unsigned char*)testCases[tc].password);
+        unsigned long result = se_shannon((unsigned char*)testCases[tc].password);
         printf("Password [ %s ] = [ %lu ] bits of entropy.\n", testCases[tc].password, result);
         TEST_ASSERT_EQUAL(testCases[tc].entropy, result);
     }
@@ -69,9 +69,9 @@ static void testBruteForceDaysCalculator(void) {
         }
     };
 
-    log_info("Testing SE_bruteForceDays function.");
+    log_info("Testing se_bruteForceDays function.");
     for (size_t i = 0; i < 3; i++) {
-        unsigned long long result = SE_bruteForceDays(testCases[i].bits);
+        unsigned long long result = se_bruteForceDays(testCases[i].bits);
         printf(
             "Entropy bits [ %lu ] = [ %llu ] days to brute force the password.\n",
             testCases[i].bits, 
@@ -102,13 +102,42 @@ static void testBruteForceYearsAndDays(void) {
         }
     };
 
-    log_info("Testing SE_yearsAndDays function.");
+    log_info("Testing se_yearsAndDays function.");
     for (size_t i = 0; i < 3; i++) {
-        unsigned long long result = SE_bruteForceDays(testCases[i].bits);
-        char *str = SE_yearsAndDays(result);
+        unsigned long long result = se_bruteForceDays(testCases[i].bits);
+        char *str = se_yearsAndDays(result);
         printf("Brute force will take %s.\n", str);
         TEST_ASSERT_EQUAL(0, strcmp(testCases[i].str, str));
         free(str);
+    }
+}
+
+static void testGetPwned(void) {
+    typedef struct testCase {
+        unsigned long long count;
+        char str[32];
+    } TestCase;
+
+    TestCase testCases[3] = {
+        {
+            .count = 276637,
+            .str = "admin"
+        },
+        {
+            .count = 218510,
+            .str = "america"
+        },
+        {
+            .count = 701165, 
+            .str = "computer"
+        }
+    };
+
+    log_info("Testing se_getPwned function.");
+    for (size_t i = 0; i < 3; i++) {
+        unsigned long long result = se_getPwned((const unsigned char *)testCases[i].str);
+        printf("Password [ %s ] is Pwned %llu times.\n", testCases[i].str, result);
+        TEST_ASSERT_GREATER_THAN(testCases[i].count, result);
     }
 }
 
@@ -116,10 +145,10 @@ static void benchShannon(void) {
     const size_t iter = 1000;
     struct timeval begin, end;
     gettimeofday(&begin, 0);
-    log_info("Benchmarking SE_shannon function.");
+    log_info("Benchmarking se_shannon function.");
     char psswd[] = "someLongPasswordToBench";
     for (size_t tc = 0; tc < iter; tc++) {
-        unsigned long result = SE_shannon((unsigned char*)psswd);
+        unsigned long result = se_shannon((unsigned char*)psswd);
         TEST_ASSERT_EQUAL(92, result);
     }
 
@@ -138,6 +167,7 @@ int main(void)
     RUN_TEST(testShannon);
     RUN_TEST(testBruteForceDaysCalculator);
     RUN_TEST(testBruteForceYearsAndDays);
+    RUN_TEST(testGetPwned);
     
     RUN_TEST(benchShannon);
    
