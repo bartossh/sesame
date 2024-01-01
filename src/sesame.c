@@ -17,6 +17,13 @@
 
 const char url[38] = "https://api.pwnedpasswords.com/range/\0";
 
+#define HASH_REQ_LEN 5
+#define HASH_HEX_LEN (SHA_DIGEST_LENGTH*2)
+#define URL_LEN sizeof(url)+sizeof(char)*HASH_REQ_LEN
+#define HASH_CHARS_STEP 2
+#define HASH_CHARS_SIZE 5
+
+
 unsigned long 
 se_shannon(const unsigned char *str) {
     if (!str) {
@@ -125,12 +132,12 @@ sha1sum(const unsigned char *str) {
     size_t len = strlen((const char*)str);
     unsigned char * s = malloc(sizeof(char)*SHA_DIGEST_LENGTH);
     SHA1(str, len, s);
-    unsigned char *hash = malloc(sizeof(char)*((SHA_DIGEST_LENGTH*2)+1));
+    unsigned char *hash = malloc(sizeof(char)*((HASH_HEX_LEN)+1));
 
     for(int i = 0; i<SHA_DIGEST_LENGTH; ++i) {
-        snprintf((char *)(&hash[i*2]), sizeof(char)*5, "%02X", s[i]);
+        snprintf((char *)(&hash[i*HASH_CHARS_STEP]), sizeof(char)*HASH_CHARS_SIZE, "%02X", s[i]);
     }
-    hash[40]='\0';
+    hash[HASH_HEX_LEN]='\0';
     free(s);
     return hash;
 }
@@ -139,8 +146,8 @@ static unsigned long long
 findMatching(const unsigned char *buff, unsigned char *hash) {
     char * line = strtok(strdup((const char*)buff), "\n");
     while(line) {
-        if (strncmp(line, (const char *)(&hash[5]), 35) == 0) {
-            unsigned long long value = strtoull((char *)(&line[36]), NULL, 10);
+        if (strncmp(line, (const char *)(&hash[HASH_REQ_LEN]), HASH_HEX_LEN-HASH_REQ_LEN) == 0) {
+            unsigned long long value = strtoull((char *)(&line[HASH_HEX_LEN-HASH_REQ_LEN+1]), NULL, 10);
             return value;
         }
         line  = strtok(NULL, "\n");
@@ -160,8 +167,8 @@ se_getPwned(const unsigned char *str) {
         exit(EXIT_FAILURE);
     }
     unsigned char *hash = sha1sum(str); 
-    char url_request[43] = "";
-    int written = snprintf(url_request, 43,"%s%s", url, hash);
+    char url_request[URL_LEN] = "";
+    int written = snprintf(url_request, URL_LEN,"%s%s", url, hash);
     if (written == 0) {
         fprintf(stderr, "Cannot create url request.\n"); 
         exit(EXIT_FAILURE);

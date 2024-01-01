@@ -10,9 +10,12 @@ This software is still under development, keep your expectations low.
 
 ## Disclaimer
 
-This software aims to help you check your password strength by using message entropy calculation and checking the password against the pwned password database. It is not an omnipotent tool to secure your password. Use your judgment based on the information given back from this software. We take no responsibility for the way you use and interpret information produced by this software.
+This software aims to help you check your password strength by using message entropy calculation and checking the password against the pwned password database. It is not an omnipotent tool to secure your password. Use your judgment based on the information given back from this software. 
 
-The password that you will pass as an input to this software is not stored or sent anywhere. The SHA1 hash is created and 5 first characters are added to the request sent `GET https://api.pwnedpasswords.com/range/{first 5 hash chars}`. The downloaded  data of the list of pawned password hashes are then used to check your password. The full hash is compared to find a matching hash from downloaded list of hashes. If hashes matches your password hash then the corresponding number is used to confirm to you how many times the given password has been pwned.
+We take no responsibility for the way you use and interpret information produced by this software.
+
+The password that you will pass as an input to this software is not stored or sent anywhere.
+The first five digits of SHA1 hash of your password are used in the query to fetch pwned passwords hashes for analytics.
 
 It is safe to provide the password as an input to this software.
 
