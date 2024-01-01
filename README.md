@@ -2,6 +2,8 @@
 
 Sesame is a simple CLI tool written in C for validating password security.
 
+This software uses **https://haveibeenpwned.com/** to validate pwned passwords.
+
 This software is still under development, keep your expectations low.
 
 
