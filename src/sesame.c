@@ -1,3 +1,5 @@
+/// Copyright (c) 2024 Bartosz Lenart
+
 #include <string.h>
 #include <stdbool.h>
 #include <math.h>

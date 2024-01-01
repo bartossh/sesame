@@ -1,3 +1,5 @@
+/// Copyright (c) 2024 Bartosz Lenart
+
 #include <sys/time.h>
 #include <strings.h> 
 #include <stdlib.h>
