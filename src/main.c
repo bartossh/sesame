@@ -6,6 +6,8 @@
 #include "sesame.h"
 
 #define PasswordLength 128
+#define StrengthIndicatorLenght 32
+#define DaysInYear 365
 
 int min(int a, int b) {
     if (a < b) {
@@ -15,8 +17,8 @@ int min(int a, int b) {
 }
 
 void validator(unsigned char* str) {
-    unsigned long result = SE_shannon(str);
-    unsigned long long days = SE_bruteForceDays(result);
+    unsigned long result = se_shannon(str);
+    unsigned long long days = se_bruteForceDays(result);
     
     printf("\n");
     switch (result) {
@@ -28,27 +30,32 @@ void validator(unsigned char* str) {
             break;
     }
     printf("\n");
-    int strength = min(result/4 ,32);
+    int strength = min(result/4 ,StrengthIndicatorLenght);
     printf("STRENGTH: %.*s%.*s%s",
            strength, 
            "+++++++++++++++++++++++++++++++++",
-           32 - strength,
+           StrengthIndicatorLenght - strength,
            "                                 ",
            "|<<< MAX\n"); 
     printf("\n");
-    if (days < 365) {
+    if (days < DaysInYear) {
         printf(
             "INFO: It will take %llu days to brute force your password with speed of 1000 guesses/second.\n",
             days
         );
     } else {
-        char *yd = SE_yearsAndDays(days);
+        char *yd = se_yearsAndDays(days);
         printf(
             "INFO: It will take %s to brute force your password with speed of 1000 guesses/second.\n",
             yd
         );
         free(yd);
     }
+    printf("\n");
+
+    unsigned long long pwned_count = se_getPwned(str);
+    printf("INFO: Password [ %s ] is Pwned %llu times.\n", str, pwned_count);
+
     printf("\n");
 }
    

@@ -41,6 +41,23 @@ Run in terminal:
 ./sesame yourStringPasswordToValidate
 ```
 
+Or pipe the input:
+```sh
+echo -n administrator | ./sesame
+```
+
+Example response:
+
+```sh
+INFO: Password: [ administrator ] has 52 bits of Shannon entropy.
+
+STRENGTH: +++++++++++++                   |<<< MAX
+
+INFO: It will take 142808 years and 75 days to brute force your password with speed of 1000 guesses/second.
+
+INFO: Password [ administrator ] is Pwned 32708 times.
+```
+
 
 ### Pwned Passwords
 
